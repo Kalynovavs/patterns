@@ -12,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -20,6 +19,8 @@ import java.util.Locale;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import java.util.Arrays;
+import java.util.List;
 
 public class CallbackTest {
     private WebDriver driver;
@@ -51,9 +52,12 @@ public class CallbackTest {
         dateNow = LocalDateTime.now();
         dateAllowable = dtf.format(dateNow.plusDays(4));
         faker = new Faker(new Locale("ru"));
+        Sities sities = new Sities();
+        List<String> list = Arrays.asList(sities.getAlphabet());
+
         do {
             addr = faker.address().cityName();
-        } while (addr == "Тольятти" || addr == "Тольятти" || addr == "Новокузнецк");
+        } while (!list.contains(addr));
     }
 
     @AfterEach
