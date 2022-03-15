@@ -1,4 +1,4 @@
-package ru.netology.patterns;
+package ru.netology.data;
 
 public class Sities {
 
