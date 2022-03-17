@@ -1,16 +1,13 @@
 package ru.netology.patterns;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import ru.netology.data.DataHelper;
+
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -19,32 +16,11 @@ import static com.codeborne.selenide.Selenide.open;
 public class CallbackTest {
     private WebDriver driver;
 
-    @BeforeAll
-    static void setUpAll() {
-        //System.setProperty("webdriver.chrome.driver", "webdriver//chromedriver");
-        WebDriverManager.chromedriver().setup();
-    }
-
     @BeforeEach
     void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("start-maximized");
-        options.addArguments("disable-infobars");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--no-sandbox");
-        driver = new ChromeDriver(options);
         open("http://localhost:9999");
     }
 
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
 
     @Test
     void shouldSubmitRequestSuccess() {
@@ -60,6 +36,7 @@ public class CallbackTest {
         form.$("[data-test-id=agreement]").click();
         form.$(".button").click();
         $("[data-test-id=success-notification]").shouldBe(visible);
+        $("[data-test-id=success-notification] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate));
     }
 
     @Test
@@ -203,6 +180,7 @@ public class CallbackTest {
         form.$("[data-test-id=agreement]").click();
         form.$(".button").click();
         $("[data-test-id=success-notification]").shouldBe(visible);
+        $("[data-test-id=success-notification] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate));
         form.$("[data-test-id=date] input").doubleClick();
         form.$("[data-test-id=date] input").sendKeys(Keys.BACK_SPACE);
         form.$("[data-test-id=date] input").setValue(secondMeetingDate);
@@ -210,5 +188,6 @@ public class CallbackTest {
         $("[data-test-id=replan-notification]").shouldBe(visible);
         $("[data-test-id=replan-notification] button").click();
         $("[data-test-id=success-notification]").shouldBe(visible);
+        $("[data-test-id=success-notification] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate));
     }
 }

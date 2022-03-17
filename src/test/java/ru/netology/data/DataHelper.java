@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class DataHelper {
 
@@ -21,15 +22,8 @@ public class DataHelper {
     }
 
     public static String generateCity(String locale) {
-        Faker faker = new Faker(new Locale(locale));
-        String addr;
-        Sities sities = new Sities();
-        List<String> list = Arrays.asList(sities.getAlphabet());
-
-        do {
-            addr = faker.address().cityName();
-        } while (!list.contains(addr));
-        return addr;
+        String[] cities = new Sities().getAlphabet();
+        return cities[new Random().nextInt(cities.length)];
     }
 
     public static String generateName(String locale) {
